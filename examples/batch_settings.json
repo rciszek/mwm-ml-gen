@@ -1,0 +1,18 @@
+{
+    "groups":"1,2",
+    "cv_error":0,
+    "cv_k":100,
+    "cv_start":0,
+    "cv_end":25,
+    "cv_size":40,
+    "cv_ks":0,
+    "classification_mode":"Re-generate",
+    "traj_to_segment":0,
+    "str_distr":3,
+    "trans_distr":3,
+    "sigma":0,
+    "interval":0,
+    "r_sigma":0,
+    "r_interval":0,
+    "smoothing":"Before"
+}
