@@ -13,7 +13,7 @@ function [ distr, centroids, flag ] = mpckmeans( x, constr, k )
     d = size(x);
     flag = 1; % capture any error
 	tmp = find(isnan(x));
-    x(tmp) = 0
+    x(tmp) = 0;
             
      % create attributes Cell Array
     attr = {};

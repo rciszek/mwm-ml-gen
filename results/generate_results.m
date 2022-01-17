@@ -6,7 +6,6 @@ function [error,dir_master] = generate_results(project_path, name, my_trajectori
     WAITBAR = 1;
     FIGURES = 1;
     DISTRIBUTION = 3;
-    
     for i = 1:length(varargin)
         if isequal(varargin{i},'extra_segments')
             extra_segments = varargin{i+1};

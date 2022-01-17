@@ -1,30 +1,12 @@
-function [groups,my_trajectories] = select_groups(my_trajectories)
-%SELECT_GROUPS allows the user to select which one or two groups he wants
-%in order to generate the results
+function [groups,my_trajectories] = select_groups(my_trajectories, user)
+%SELECT_GROUPS selects group or groups used to generate the results
 
 % groups = -1: only one group is available, no need for input request
 % groups = -2: error, wrong input
 
-    % find available animal groups
     groups_all = arrayfun( @(t) t.group, my_trajectories.items);
     groups = unique(groups_all);
-    % if we have more than one groups ask which one or two groups
-    if length(groups) > 1
-        prompt={'Choose one or two animal groups (example: 2 or 1,3. In case groups need to be merged type 1:2,3:4 to merge the equivalent groups)'};
-        name = 'Choose groups';
-        defaultans = {''};
-        options.Interpreter = 'tex';
-        user = inputdlg(prompt,name,[1 30],defaultans,options);
-        if isempty(user)
-            groups = -2;
-            return
-        end
-    else
-        groups = -1;
-        return
-    end    
-    
-    user = user{1};
+
     % Check the user's input
     numbers = []; %groups
     comma = 0; % ',' index
@@ -44,7 +26,6 @@ function [groups,my_trajectories] = select_groups(my_trajectories)
         end
     end
     if groups == -2
-        errordlg('Wrong group(s) input','Input Error');
         return;
     end
     
@@ -60,7 +41,6 @@ function [groups,my_trajectories] = select_groups(my_trajectories)
             return;
         else
             groups == -2
-            errordlg('Wrong group(s) input','Input Error');
             return;            
         end
     end
@@ -71,7 +51,6 @@ function [groups,my_trajectories] = select_groups(my_trajectories)
     tmp = find(numbers==tmp);
     if length(tmp) > 1
         groups = -2;
-        errordlg('Animal groups cannot be merged, one specified group exists in both groups','Input Error');
         return;
     else
         group1 = numbers(1:tmp);
@@ -81,7 +60,6 @@ function [groups,my_trajectories] = select_groups(my_trajectories)
     tmp = find(numbers==tmp);
     if length(tmp) > 1
         groups = -2;
-        errordlg('Animal groups cannot be merged, one specified group exists in both groups','Input Error');
         return;
     else
         group2 = numbers(tmp:end);
@@ -95,7 +73,6 @@ function [groups,my_trajectories] = select_groups(my_trajectories)
         if isempty(tmp) %if this number is not in group1 it must be in group2
             tmp = find(group2==g);
             if isempty(tmp)
-                errordlg('Error in merging animal groups.','Error:Debug');
                 return
             else
                 my_trajectories.items(i).group = g2;

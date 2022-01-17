@@ -1,4 +1,4 @@
-function [class_folder,error] = build_classification_folder(ppath,prefix,labels,segs,len,ovl,varargin)
+function [class_folder,error] = build_classification_folder(ppath,prefix,labels,segs,len,ovl,mode,varargin)
 %BUILD_CLASSIFICATION_FOLDER creates the folder of the classifiers 
 
     note = '';
@@ -13,7 +13,11 @@ function [class_folder,error] = build_classification_folder(ppath,prefix,labels,
     
     try
         if exist(class_folder,'dir')
-            choice = questdlg('Default classifiers already exist would you like to re-generate them or add more to the pool?','Folder exists','Add','Re-generate','Cancel','Add');
+            if isempty(mode)
+                choice = questdlg('Default classifiers already exist would you like to re-generate them or add more to the pool?','Folder exists','Add','Re-generate','Cancel','Add');
+            else
+                choice = mode;
+            end
             if isequal(choice,'Re-generate')
                 fclose('all');
                 rmdir(class_folder,'s');

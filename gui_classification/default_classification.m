@@ -1,4 +1,4 @@
-function error = default_classification(project_path,seg_name,lab_name,ret,varargin)
+function error = default_classification(project_path,seg_name,lab_name,ret,mode,varargin)
 %DEFAULT_CLASSIFICATION 
 
     error = 1;
@@ -35,9 +35,11 @@ function error = default_classification(project_path,seg_name,lab_name,ret,varar
     % segments ovelap and labels note (if applicant)
     [labs,len,ovl,note,~] = split_labels_name(lab_name);
     [~,segs,~,~] = split_segmentation_name(seg_name);
-    [class_folder,error] = build_classification_folder(ppath,'class',labs,segs,len,ovl,note);
+    
+    [class_folder,error] = build_classification_folder(ppath,'class',labs,segs,len,ovl,mode,note);
+    fprintf(1,'%s',class_folder);
     if error == 1
-        errordlg('Cannot create classification folder','Error');
+        report_error('Cannot create classification folder','Error');
         return        
     elseif error == 2
         error = 0;
@@ -73,7 +75,7 @@ function error = default_classification(project_path,seg_name,lab_name,ret,varar
     end
     er = generate_classifiers(class_folder, num_clusters, segmentation_configs, LABELLING_MAP, ALL_TAGS, CLASSIFICATION_TAGS, 'SKIP_CHECK',num_clusters, varargin{:});
     if er
-        errordlg('Cannot generate classifiers.','Error');
+        report_error('Cannot generate classifiers.','Error');
         return
     end
 
@@ -82,7 +84,7 @@ function error = default_classification(project_path,seg_name,lab_name,ret,varar
     % iterations, technique (majority rule with 0 threshold)
     [Mclass_folder,error] = build_Mclassification_folder(class_folder,num2str(length(cvErr)),'1','mr0');
     if error
-        errordlg('Cannot create merged classification folder.','Error');
+        report_error('Cannot create merged classification folder.','Error');
         return        
     end   
     
@@ -94,7 +96,7 @@ function error = default_classification(project_path,seg_name,lab_name,ret,varar
     if ~error
         error = 0;
     else
-        errordlg('Error performing majority voting.','Error');
+        report_error('Error performing majority voting.','Error');
     end    
 end
 

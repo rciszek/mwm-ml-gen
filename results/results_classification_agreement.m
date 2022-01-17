@@ -5,6 +5,7 @@ function results_classification_agreement(ouput_folder, varargin)
     WAITBAR = 1;
     FOLDER = '';
     files = {};
+    class_folder = [];
     
     for i = 1:length(varargin)
         if isequal(varargin{i},'SEGMENTATION')
@@ -17,27 +18,33 @@ function results_classification_agreement(ouput_folder, varargin)
         elseif isequal(varargin{i},'FOLDER')
             FOLDER = varargin{i+1};            
         elseif isequal(varargin{i},'CLASSIFIERS')
-            files = varargin{i+1};          
+            files = varargin{i+1};
+        elseif isequal(varargin{i},'CLASS_PATH')
+            class_folder = varargin{i+1};          
         end
     end
     
-    % Get special folder 'Documents' as char
-    if ismac
-        doc_path = char(java.lang.System.getProperty('user.home'));
-        doc_path = fullfile(doc_path,'Documents');
-    else
-        doc_path = char(getSpecialFolder('MyDocuments'));
-    end
-
-    % Get merged classifications
-    if isempty(FOLDER)
-        folder = uigetdir(doc_path,'Select one Merged Classification folder');
-    else
-        if exist(FOLDER,'dir')
-            folder = FOLDER;
+   if isempty(class_folder)
+        % Get special folder 'Documents' as char
+        if ismac
+            doc_path = char(java.lang.System.getProperty('user.home'));
+            doc_path = fullfile(doc_path,'Documents');
         else
-            folder = uigetdir(doc_path,'Select one Merged Classification folder'); 
+            doc_path = char(getSpecialFolder('MyDocuments'));
         end
+
+        % Get merged classifications
+        if isempty(FOLDER)
+            folder = uigetdir(doc_path,'Select one Merged Classification folder');
+        else
+            if exist(FOLDER,'dir')
+                folder = FOLDER;
+            else
+                folder = uigetdir(doc_path,'Select one Merged Classification folder'); 
+            end
+        end
+    else
+        folder = class_folder;
     end
     if isnumeric(folder)
         return;
@@ -50,7 +57,8 @@ function results_classification_agreement(ouput_folder, varargin)
         return;
     end
     %sort by classifier number
-    files = extractfield(files,'name')';
+    %files = extractfield(files,'name')';
+    files = {files.name}
     [~,idx] = sort_classifiers(files);
     files = files(idx);    
     

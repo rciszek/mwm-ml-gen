@@ -37,9 +37,10 @@ function [error, count, percentage_per_classifier] = class_statistics(ppath, cla
         if CLASSIFICATION
             mcpath = fullfile(ppath,'classification',class_name);
         end
-        files = dir(fullfile(mcpath,'*.mat'));
+        files = dir(fullfile(mcpath,'*.mat')),
         %sort by classifier number
-        files = extractfield(files,'name')';
+        %files = extractfield(files,'name')';
+        files = {files.name} % No Mapping Toolbox required
         [~,idx] = sort_classifiers(files);
         files = files(idx);
 
@@ -49,7 +50,8 @@ function [error, count, percentage_per_classifier] = class_statistics(ppath, cla
         clear classification_configs
     else
         %sort by classifier number
-        files = extractfield(files,'name')';
+        %files = extractfield(files,'name')';
+        files = {files.name} % No Mapping Toolbox required
         [~,idx] = sort_classifiers(files);
         files = files(idx);
         CLASSIFICATION = 1;
@@ -179,15 +181,15 @@ function [error, count, percentage_per_classifier] = class_statistics(ppath, cla
     if length(cols)-4 > 1 % only if we have more than one classifiers
         if SEGMENTATION
             if flag
-                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION,'SEGMENTATION',segmentation_configs, 'CLASSIFIERS',varargin{flag}, 'WAITFAR',WAITBAR);
+                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION,'SEGMENTATION',segmentation_configs, 'CLASSIFIERS',varargin{flag}, 'WAITFAR',WAITBAR,'CLASS_PATH',mcpath);
             else
-                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION,'SEGMENTATION',segmentation_configs, 'WAITFAR',WAITBAR);
+                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION,'SEGMENTATION',segmentation_configs, 'WAITFAR',WAITBAR,'CLASS_PATH',mcpath);
             end
         else
             if flag
-                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION, 'CLASSIFIERS',varargin{flag}, 'WAITFAR',WAITBAR);
+                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION, 'CLASSIFIERS',varargin{flag}, 'WAITFAR',WAITBAR,'CLASS_PATH',mcpath);
             else
-                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION, 'WAITFAR',WAITBAR);
+                results_classification_agreement(rpath,'FOLDER',mcpath,'CLASSIFICATION',CLASSIFICATION, 'WAITFAR',WAITBAR,'CLASS_PATH',mcpath);
             end
         end
     end
