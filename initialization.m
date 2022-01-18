@@ -10,12 +10,20 @@ function [main_path] = initialization
     else
         %main_path = ctfroot;
     end    
-
+    
     %% Generate default folder
     %get special folder 'Documents' as char
     if ismac
         doc_path = char(java.lang.System.getProperty('user.home'));
         doc_path = fullfile(doc_path,'Documents');
+    elseif isunix
+        doc_path = char(java.lang.System.getProperty('user.home'));
+        if isfile(fullfile(doc_path,'Documents'))
+            doc_path = fullfile(doc_path, 'Documents');
+        else
+            new_documents = fullfile(doc_path, 'Documents');
+            mkdir(new_documents);
+        end
     else
         doc_path = char(getSpecialFolder('MyDocuments'));
     end
