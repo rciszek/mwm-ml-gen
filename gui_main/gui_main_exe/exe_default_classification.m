@@ -12,7 +12,7 @@ function exe_default_classification(hObject, eventdata, handles)
     tmp = get(handles.default_labels,'Value');
     lab_name = lab_name{tmp};
     ret = get(handles.classification_conf,'UserData');
-    error = default_classification(project_path,seg_name,lab_name,ret);
+    error = default_classification(project_path,seg_name,lab_name,ret,[]);
     if error == 2 %perform cv first 
         options = 'labels';
         p = strsplit(lab_name,'.mat');
@@ -36,7 +36,7 @@ function exe_default_classification(hObject, eventdata, handles)
         export_num_of_clusters(output_path,data);
         output_path2 = char(fullfile(project_path,'labels',strcat(p,'_check'),options));
         export_num_of_clusters(output_path2,data);     
-        error = default_classification(project_path,seg_name,lab_name,ret);
+        error = default_classification(project_path,seg_name,lab_name,ret,[]);
     elseif error == 1
         set(temp(idx),'Visible','on');
         return
